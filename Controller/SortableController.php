@@ -20,10 +20,11 @@ class SortableController extends AbstractController
      */
     public function sort(Request $request, EntityManagerInterface $em, string $property): RedirectResponse
     {
+        $entity = $request->get('entity');
         $id = $request->get('id');
         $position = (int)$request->get('position');
         $adminContext = $request->attributes->get(EA::CONTEXT_REQUEST_ATTRIBUTE);
-        $object = $em->find($request->query->get('entity'), $id);
+        $object = $em->find($request->query->get('entityFqsn'), $id);
 
         if (null === $object) {
             throw $this->createNotFoundException();
