@@ -1,5 +1,5 @@
 {
-    "name": "torfs-ict/ea-sortable-bundle",
+    "name": "azatkama/ea-sortable-bundle",
     "description": "Sortable entities in EasyAdmin bundle with drag-and-drop interface",
     "type": "symfony-bundle",
     "license": "MIT",
