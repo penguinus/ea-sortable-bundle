@@ -4,7 +4,7 @@ let easyadminDragndropSort =
 
             let url = document.body.querySelector('[data-sortable]');
 
-            if (url && document.body.classList.contains('easyadmin') && document.body.classList.contains('list')) {
+            if (url && document.body.classList.contains('ea') && document.body.classList.contains('ea-index')) {
                 if (!Array.prototype.last){
                     Array.prototype.last = function(){
                         return this[this.length - 1];
