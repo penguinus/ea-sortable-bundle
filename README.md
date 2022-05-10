@@ -11,7 +11,7 @@ The javascript and css was copied from [treetop1500/easyadmin-dragndrop-sort
 Install the bundle using composer:
 
 ```bash
-$ composer req torfs-ict/ea-sortable-bundle
+$ composer req azatkama/ea-sortable-bundle
 ```
 
 Add the bundle routing to `config/routes.yaml`:
