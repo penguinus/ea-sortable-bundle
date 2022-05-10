@@ -3,6 +3,7 @@
 namespace Orkestra\EaSortable\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Configuration\ConfigManager;
@@ -18,13 +19,18 @@ class SortableController extends AbstractController
     /**
      * @Route("/admin/sort/{property}", name="easyadmin.sortable.sort")
      */
-    public function sort(Request $request, EntityManagerInterface $em, string $property): RedirectResponse
+    public function sort(
+        Request $request,
+        EntityManagerInterface $em,
+        string $property
+    ): RedirectResponse
     {
         $entity = $request->get('entity');
+        $entityFqsn = $request->query->get('entityFqsn');
         $id = $request->get('id');
         $position = (int)$request->get('position');
         $adminContext = $request->attributes->get(EA::CONTEXT_REQUEST_ATTRIBUTE);
-        $object = $em->find($request->query->get('entityFqsn'), $id);
+        $object = $em->find($entityFqsn, $id);
 
         if (null === $object) {
             throw $this->createNotFoundException();
@@ -32,11 +38,11 @@ class SortableController extends AbstractController
 
         $accessor = PropertyAccess::createPropertyAccessor();
         $accessor->setValue($object, $property, $position);
+
+        $em->persist($object);
         $em->flush();
 
-        return $this->redirectToRoute('easyadmin', [
-            'action' => 'list',
-            'entity' => $entity
-        ]);
+        return $this->redirect($request->headers->get('referer'));
     }
 }
+
