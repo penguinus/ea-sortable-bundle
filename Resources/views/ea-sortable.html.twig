@@ -1,2 +1,2 @@
 {% set property = action.property|default('position') %}
-<div class="d-none" data-sortable="{{ url('easyadmin.sortable.sort', {property: property}|merge(action.routeParameters)) }}"></div>
+<div class="d-none" data-sortable="{{ path('easyadmin.sortable.sort', {property: property}|merge(action.routeParameters)) }}"></div>
