@@ -11,7 +11,6 @@ let easyadminDragndropSort =
                     };
                 }
 
-                let entityClass = document.body.id.split('-').last();
                 let content = document.getElementById("main");
                 let table = content.getElementsByClassName("table")[0];
                 let tbody = table.getElementsByTagName("tbody")[0];
@@ -72,7 +71,6 @@ let easyadminDragndropSort =
                         // do the ajax call to update the database
                         let xhr = new XMLHttpRequest();
                         let form = new FormData();
-                        form.append('entity', entityClass);
                         form.append('id', entityId);
                         form.append('position', endPosition);
                         xhr.open('POST', url);
