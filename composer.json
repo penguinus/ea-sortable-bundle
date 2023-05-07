@@ -1,5 +1,5 @@
 {
-    "name": "azatkama/ea-sortable-bundle",
+    "name": "penguinus/ea-sortable-bundle",
     "description": "Sortable entities in EasyAdmin bundle with drag-and-drop interface",
     "type": "symfony-bundle",
     "license": "MIT",
