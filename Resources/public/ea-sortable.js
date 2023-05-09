@@ -72,9 +72,10 @@ let easyadminDragndropSort =
                         // do the ajax call to update the database
                         let xhr = new XMLHttpRequest();
                         let form = new FormData();
-                        form.append('entity', entityClass);
+                        form.append('entityFqsn', entityClass);
                         form.append('id', entityId);
                         form.append('position', endPosition);
+                        
                         xhr.open('POST', url);
 
                         xhr.onload = function () {
@@ -84,8 +85,6 @@ let easyadminDragndropSort =
                                 let newTbody = newBody.getElementsByTagName("tbody")[0];
                                 tbody.parentNode.replaceChild(newTbody, tbody);
                                 easyadminDragndropSort.initDraggableEntityRows();
-
-                                $('input[data-toggle="toggle"]').bootstrapToggle();
                             }
                             else {
                                 alert("An error occurred while sorting. Please refresh the page and try again.")
