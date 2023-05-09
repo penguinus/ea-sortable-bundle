@@ -6,12 +6,15 @@ EasyAdmin list view.
 The javascript and css was copied from [treetop1500/easyadmin-dragndrop-sort
 ](https://github.com/treetop1500/easyadmin-dragndrop-sort) with some minor improvements.
 
+
+Updated in 2023 for PHP 8.2 / Symfony 6 / EA 4.
+
 # Installation
 
 Install the bundle using composer:
 
 ```bash
-$ composer req azatkama/ea-sortable-bundle
+$ composer req penguinus/ea-sortable-bundle
 ```
 
 Add the bundle routing to `config/routes.yaml`:
@@ -24,59 +27,60 @@ ea-sortable:
 
 # Usage
 
-## Using the sortable trait
+### Using the sortable trait
+Add the `Orkestra\EaSortable\SortableTrait` trait to your entity.
 
-Add the `Orkestra\EaSortable\SortableTrait` trait to your entity. Below is the sample configuration for 
-EasyAdmin.
+### Without sortable trait
+If you already have a table and sorting position field name is not `position`, configure it manually. 
 
-```yaml
-easy_admin:
-  entities:
-    SortableEntity:
-      class: App\Entity\SortableEntity
-      list:
-        sort: ['position', 'ASC']
-        actions:
-          - delete
-          - edit
-          - new
-          - search
-          - { name: sort, template: '@OrkestraEaSortable/ea-sortable.html.twig' }
-        fields:
-          - { property: id, label: '$Id', sortable: false }
-          - { property: name, label: Name, sortable: false }
+# Configuration
+### Sample entity configuration
+
+```php
+class SomeEntity
+{
+...
+    #[ORM\Column(type: Types::SMALLINT)]
+    #[Gedmo\SortablePosition]
+    private ?int $position = null;
+    
+    #[Gedmo\SortableGroup]
+    private ?Syllabus $group = null;
+...
+}
+```
+
+
+
+### Sample crud controller configuration
+
+```php
+class SomeCrudController extends AbstractCrudController
+{
+...
+    public function configureFields(string $pageName): iterable
+    {
+        yield IntegerField::new('position')->setLabel('Order')->setSortable(false);
+        yield TextField::new('name')->setSortable(false);
+        yield TextEditorField::new('description')->setSortable(false);
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        $actionSort = Action::new('sort')
+            ->setTemplatePath('@OrkestraEaSortable/ea-sortable.html.twig')
+            ->linkToRoute('easyadmin.sortable.sort', ['property' => 'position', 'fqcn' => SomeEntity::class])
+            ->createAsGlobalAction()
+        ;
+        return $actions
+            ->add(Crud::PAGE_INDEX, $actionSort)
+        ;
+    }
+...
+}
 ```
 
 Some notes about the configuration:
 
-1. setting the `sort` option is mandatory, obviously
-2. you need to provide the custom `sort` action in order to enable the drag-and-drop functionality
-3. sorting must be disabled on all other list fields (there is no way to do this globally in EasyAdmin)
-
-## Without the sortable trait
-
-As long as your sorting property is called `position` you can simply follow the same steps as when
-using the sortable trait. If not you need to do the following things:
-
-1. change the property in the `sort` option
-2. configure the property on the `sort` action
-
-The following example assumes the sorting property is named `index`.
-
-```yaml
-easy_admin:
-  entities:
-    SortableEntity:
-      class: App\Entity\SortableEntity
-      list:
-        sort: ['index', 'ASC']
-        actions:
-          - delete
-          - edit
-          - new
-          - search
-          - { name: sort, template: '@OrkestraEaSortable/ea-sortable.html.twig', property: index }
-        fields:
-          - { property: id, label: '$Id', sortable: false }
-          - { property: name, label: Name, sortable: false }
-```
+1. you need to provide the custom `sort` action in order to enable the drag-and-drop functionality
+2. sorting must be disabled on all other list fields (there is no way to do this globally in EasyAdmin)

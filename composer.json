@@ -16,7 +16,6 @@
     },
     "require": {
         "easycorp/easyadmin-bundle": "^4",
-        "sensio/framework-extra-bundle": "^6.1",
         "stof/doctrine-extensions-bundle": "^1.7"
     }
 }
